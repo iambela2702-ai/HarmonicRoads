@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+
+{% block title %}ArmonIA Vial - Inicio{% endblock %}
+
+{% block content %}
+<section class="hero">
+    <div class="hero-overlay"></div>
+    <div class="hero-content" data-aos="fade-up">
+        <h1 class="hero-title">ArmonIA Vial</h1>
+        <p class="hero-slogan">Mover con respeto, vivir en armonía</p>
+        <p class="hero-description">Conectando Urabá hacia una movilidad con conciencia y armonía</p>
+        <div class="hero-buttons">
+            <a href="{{ url_for('educacion') }}" class="btn btn-primary">Comenzar a Aprender</a>
+            <a href="{{ url_for('mapa') }}" class="btn btn-secondary">Explorar Mapa</a>
+        </div>
+    </div>
+</section>
+
+<section class="features">
+    <div class="container">
+        <h2 class="section-title" data-aos="fade-up">Nuestros Pilares</h2>
+        <div class="features-grid">
+            <div class="feature-card" data-aos="fade-up" data-aos-delay="100">
+                <div class="feature-icon">
+                    <i class="fas fa-leaf"></i>
+                </div>
+                <h3>Ambiente</h3>
+                <p>Movilidad verde y sostenible para un futuro mejor</p>
+                <a href="{{ url_for('ambiente') }}" class="feature-link">Explorar <i class="fas fa-arrow-right"></i></a>
+            </div>
+            <div class="feature-card" data-aos="fade-up" data-aos-delay="200">
+                <div class="feature-icon">
+                    <i class="fas fa-theater-masks"></i>
+                </div>
+                <h3>Cultura</h3>
+                <p>Convivencia y respeto en las vías de Urabá</p>
+                <a href="{{ url_for('cultura') }}" class="feature-link">Explorar <i class="fas fa-arrow-right"></i></a>
+            </div>
+            <div class="feature-card" data-aos="fade-up" data-aos-delay="300">
+                <div class="feature-icon">
+                    <i class="fas fa-graduation-cap"></i>
+                </div>
+                <h3>Educación</h3>
+                <p>Aprende sobre seguridad vial de forma interactiva</p>
+                <a href="{{ url_for('educacion') }}" class="feature-link">Explorar <i class="fas fa-arrow-right"></i></a>
+            </div>
+            <div class="feature-card" data-aos="fade-up" data-aos-delay="400">
+                <div class="feature-icon">
+                    <i class="fas fa-users"></i>
+                </div>
+                <h3>Comunidad</h3>
+                <p>Comparte tu voz y experiencias viales</p>
+                <a href="{{ url_for('comunidad') }}" class="feature-link">Explorar <i class="fas fa-arrow-right"></i></a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="cta-section">
+    <div class="container">
+        <div class="cta-content" data-aos="zoom-in">
+            <h2>¿Listo para movilizarte con conciencia?</h2>
+            <p>Únete a la comunidad que está transformando la movilidad en Urabá</p>
+            <a href="{{ url_for('asistente') }}" class="btn btn-primary">Habla con nuestro Asistente</a>
+        </div>
+    </div>
+</section>
+{% endblock %}

@@ -1,0 +1,220 @@
+{% extends "base.html" %}
+
+{% block title %}Educación - ArmonIA Vial{% endblock %}
+
+{% block content %}
+<section class="page-header">
+    <div class="container">
+        <h1 data-aos="fade-down"><i class="fas fa-graduation-cap"></i> Educación Vial</h1>
+        <p data-aos="fade-up">Aprender a movernos bien es parte de convivir mejor</p>
+    </div>
+</section>
+
+<section class="content-section">
+    <div class="container">
+        <div class="education-intro" data-aos="fade-up">
+            <p class="lead">La educación vial salva vidas. Aquí aprenderás de forma interactiva sobre seguridad, señales y comportamiento responsable en las vías.</p>
+        </div>
+
+        <div class="quiz-section" data-aos="fade-up">
+            <h2><i class="fas fa-question-circle"></i> Quiz de Movilidad Sostenible</h2>
+            <p>Pon a prueba tus conocimientos sobre movilidad urbana y seguridad vial</p>
+            
+            <div id="quiz-container">
+                <div class="quiz-question" id="question-container">
+                    <h3 id="question-text"></h3>
+                    <div class="quiz-options" id="options-container"></div>
+                </div>
+                <div class="quiz-controls">
+                    <button id="start-quiz" class="btn btn-primary">Comenzar Quiz</button>
+                    <button id="next-question" class="btn btn-secondary" style="display:none;">Siguiente Pregunta</button>
+                </div>
+                <div class="quiz-result" id="quiz-result" style="display:none;">
+                    <h3>Resultado</h3>
+                    <p id="score-text"></p>
+                    <button id="restart-quiz" class="btn btn-primary">Reintentar</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="learning-modules" data-aos="fade-up">
+            <h2>Módulos de Aprendizaje</h2>
+            <div class="modules-grid">
+                <div class="module-card" data-aos="zoom-in" data-aos-delay="100">
+                    <i class="fas fa-traffic-light"></i>
+                    <h4>Señales de Tránsito</h4>
+                    <p>Aprende a identificar y respetar las señales viales</p>
+                </div>
+                <div class="module-card" data-aos="zoom-in" data-aos-delay="200">
+                    <i class="fas fa-first-aid"></i>
+                    <h4>Primeros Auxilios</h4>
+                    <p>Conoce cómo actuar en caso de accidente vial</p>
+                </div>
+                <div class="module-card" data-aos="zoom-in" data-aos-delay="300">
+                    <i class="fas fa-child"></i>
+                    <h4>Seguridad Escolar</h4>
+                    <p>Protección de niños y zonas escolares</p>
+                </div>
+                <div class="module-card" data-aos="zoom-in" data-aos-delay="400">
+                    <i class="fas fa-motorcycle"></i>
+                    <h4>Conducción Segura</h4>
+                    <p>Mejores prácticas para conductores responsables</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="tips-section" data-aos="fade-up">
+            <h2>Tips de Seguridad</h2>
+            <div class="safety-tips">
+                <div class="safety-tip">
+                    <i class="fas fa-check-circle"></i>
+                    <p>Siempre usa cinturón de seguridad, incluso en trayectos cortos</p>
+                </div>
+                <div class="safety-tip">
+                    <i class="fas fa-check-circle"></i>
+                    <p>Respeta los límites de velocidad, especialmente en zonas escolares</p>
+                </div>
+                <div class="safety-tip">
+                    <i class="fas fa-check-circle"></i>
+                    <p>No uses el celular mientras conduces o caminas por la vía</p>
+                </div>
+                <div class="safety-tip">
+                    <i class="fas fa-check-circle"></i>
+                    <p>Cruza solo por los pasos de cebra y cuando el semáforo lo permita</p>
+                </div>
+                <div class="safety-tip">
+                    <i class="fas fa-check-circle"></i>
+                    <p>Si usas bicicleta o moto, usa siempre casco</p>
+                </div>
+                <div class="safety-tip">
+                    <i class="fas fa-check-circle"></i>
+                    <p>Mantén una distancia segura con el vehículo de adelante</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+const quizData = [
+    {
+        question: "¿Cuál es el medio de transporte más sostenible?",
+        options: ["Automóvil privado", "Motocicleta", "Bicicleta", "Camioneta"],
+        correct: 2
+    },
+    {
+        question: "¿Qué debes hacer al acercarte a un paso de cebra con peatones?",
+        options: ["Acelerar para pasar rápido", "Tocar la bocina", "Detenerte y cederles el paso", "Pasar despacio"],
+        correct: 2
+    },
+    {
+        question: "¿Cuántos pasajeros pueden viajar en una moto según la ley?",
+        options: ["Solo el conductor", "Conductor + 1 pasajero", "Conductor + 2 pasajeros", "No hay límite"],
+        correct: 1
+    },
+    {
+        question: "¿Qué significa una luz amarilla en el semáforo?",
+        options: ["Acelerar", "Prevención y prepararse para detenerse", "Pasar rápido", "Es decorativa"],
+        correct: 1
+    },
+    {
+        question: "¿Cuál es un beneficio de compartir el auto (carpooling)?",
+        options: ["Más tráfico", "Menos emisiones de CO₂", "Mayor consumo de gasolina", "Más estrés"],
+        correct: 1
+    }
+];
+
+let currentQuestion = 0;
+let score = 0;
+let answered = false;
+
+document.getElementById('start-quiz').addEventListener('click', startQuiz);
+document.getElementById('next-question').addEventListener('click', nextQuestion);
+document.getElementById('restart-quiz').addEventListener('click', restartQuiz);
+
+function startQuiz() {
+    currentQuestion = 0;
+    score = 0;
+    answered = false;
+    document.getElementById('start-quiz').style.display = 'none';
+    document.getElementById('quiz-result').style.display = 'none';
+    document.getElementById('question-container').style.display = 'block';
+    showQuestion();
+}
+
+function showQuestion() {
+    answered = false;
+    const question = quizData[currentQuestion];
+    document.getElementById('question-text').textContent = `Pregunta ${currentQuestion + 1}: ${question.question}`;
+    
+    const optionsContainer = document.getElementById('options-container');
+    optionsContainer.innerHTML = '';
+    
+    question.options.forEach((option, index) => {
+        const button = document.createElement('button');
+        button.className = 'quiz-option';
+        button.textContent = option;
+        button.addEventListener('click', () => checkAnswer(index));
+        optionsContainer.appendChild(button);
+    });
+    
+    document.getElementById('next-question').style.display = 'none';
+}
+
+function checkAnswer(selectedIndex) {
+    if (answered) return;
+    
+    answered = true;
+    const question = quizData[currentQuestion];
+    const options = document.querySelectorAll('.quiz-option');
+    
+    options[selectedIndex].classList.add(selectedIndex === question.correct ? 'correct' : 'incorrect');
+    options[question.correct].classList.add('correct');
+    
+    if (selectedIndex === question.correct) {
+        score++;
+    }
+    
+    options.forEach(option => option.disabled = true);
+    
+    if (currentQuestion < quizData.length - 1) {
+        document.getElementById('next-question').style.display = 'inline-block';
+    } else {
+        setTimeout(showResult, 1000);
+    }
+}
+
+function nextQuestion() {
+    currentQuestion++;
+    showQuestion();
+}
+
+function showResult() {
+    document.getElementById('question-container').style.display = 'none';
+    document.getElementById('next-question').style.display = 'none';
+    
+    const resultDiv = document.getElementById('quiz-result');
+    const scoreText = document.getElementById('score-text');
+    
+    let message = '';
+    const percentage = (score / quizData.length) * 100;
+    
+    if (percentage >= 80) {
+        message = `¡Excelente! Obtuviste ${score} de ${quizData.length} respuestas correctas. Eres un experto en movilidad sostenible. 🌟`;
+    } else if (percentage >= 60) {
+        message = `¡Bien hecho! Obtuviste ${score} de ${quizData.length} respuestas correctas. Sigue aprendiendo sobre movilidad sostenible. 👍`;
+    } else {
+        message = `Obtuviste ${score} de ${quizData.length} respuestas correctas. Te invitamos a revisar los contenidos de educación vial. 📚`;
+    }
+    
+    scoreText.textContent = message;
+    resultDiv.style.display = 'block';
+}
+
+function restartQuiz() {
+    startQuiz();
+}
+</script>
+{% endblock %}

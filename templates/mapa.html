@@ -1,0 +1,112 @@
+{% extends "base.html" %}
+
+{% block title %}Mapa - ArmonIA Vial{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+{% endblock %}
+
+{% block content %}
+<section class="page-header">
+    <div class="container">
+        <h1 data-aos="fade-down"><i class="fas fa-map-marked-alt"></i> Mapa Interactivo</h1>
+        <p data-aos="fade-up">Zonas seguras, ciclovías y puntos de interés en Urabá</p>
+    </div>
+</section>
+
+<section class="content-section">
+    <div class="container">
+        {% if weather %}
+        <div class="weather-widget" data-aos="fade-up">
+            <div class="weather-info">
+                <img src="http://openweathermap.org/img/wn/{{ weather.icon }}@2x.png" alt="Clima">
+                <div>
+                    <h3>Clima actual en Urabá</h3>
+                    <p class="weather-temp">{{ weather.temp }}°C</p>
+                    <p class="weather-desc">{{ weather.description }}</p>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+
+        <div class="map-container" data-aos="fade-up">
+            <div id="map"></div>
+        </div>
+
+        <div class="map-legend" data-aos="fade-up">
+            <h3>Leyenda</h3>
+            <div class="legend-items">
+                <div class="legend-item">
+                    <span class="legend-marker" style="background-color: #2E8B57;">🚴</span>
+                    <span>Ciclovías y rutas seguras</span>
+                </div>
+                <div class="legend-item">
+                    <span class="legend-marker" style="background-color: #1E90FF;">🏫</span>
+                    <span>Zonas escolares</span>
+                </div>
+                <div class="legend-item">
+                    <span class="legend-marker" style="background-color: #FFD700;">⚠️</span>
+                    <span>Puntos de atención</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+const map = L.map('map').setView([7.8896, -76.6400], 13);
+
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '© OpenStreetMap contributors',
+    maxZoom: 19
+}).addTo(map);
+
+const greenIcon = L.icon({
+    iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-green.png',
+    shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+    iconSize: [25, 41],
+    iconAnchor: [12, 41],
+    popupAnchor: [1, -34],
+    shadowSize: [41, 41]
+});
+
+const blueIcon = L.icon({
+    iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-blue.png',
+    shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+    iconSize: [25, 41],
+    iconAnchor: [12, 41],
+    popupAnchor: [1, -34],
+    shadowSize: [41, 41]
+});
+
+const yellowIcon = L.icon({
+    iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-yellow.png',
+    shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+    iconSize: [25, 41],
+    iconAnchor: [12, 41],
+    popupAnchor: [1, -34],
+    shadowSize: [41, 41]
+});
+
+L.marker([7.8896, -76.6400], {icon: greenIcon}).addTo(map)
+    .bindPopup('<b>Ciclovía Principal</b><br>Ruta segura para bicicletas en el centro de Apartadó');
+
+L.marker([7.8950, -76.6350], {icon: blueIcon}).addTo(map)
+    .bindPopup('<b>Zona Escolar</b><br>Colegio Departamental - Velocidad máxima: 30 km/h');
+
+L.marker([7.8850, -76.6450], {icon: greenIcon}).addTo(map)
+    .bindPopup('<b>Ruta Verde</b><br>Sendero peatonal y ciclista');
+
+L.marker([7.8920, -76.6380], {icon: yellowIcon}).addTo(map)
+    .bindPopup('<b>Punto de Atención</b><br>Intersección de alta circulación - Conducir con precaución');
+
+L.marker([7.8880, -76.6420], {icon: blueIcon}).addTo(map)
+    .bindPopup('<b>Zona Escolar</b><br>Escuela Primaria - Extremar precauciones');
+
+L.marker([7.8910, -76.6360], {icon: greenIcon}).addTo(map)
+    .bindPopup('<b>Parque Ciclístico</b><br>Área recreativa para ciclistas y peatones');
+</script>
+{% endblock %}

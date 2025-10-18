@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+
+{% block title %}Comunidad - ArmonIA Vial{% endblock %}
+
+{% block content %}
+<section class="page-header">
+    <div class="container">
+        <h1 data-aos="fade-down"><i class="fas fa-users"></i> Comunidad</h1>
+        <p data-aos="fade-up">Comparte tu voz y experiencias viales</p>
+    </div>
+</section>
+
+<section class="content-section">
+    <div class="container">
+        <div class="community-intro" data-aos="fade-up">
+            <p class="lead">Tu opinión importa. Comparte tus ideas, experiencias y sugerencias para mejorar la movilidad en Urabá.</p>
+        </div>
+
+        <div class="form-section" data-aos="fade-up">
+            <h2>Deja tu mensaje</h2>
+            <form method="POST" action="{{ url_for('comunidad') }}" class="community-form">
+                <div class="form-group">
+                    <label for="nombre"><i class="fas fa-user"></i> Tu nombre</label>
+                    <input type="text" id="nombre" name="nombre" required placeholder="¿Cómo te llamas?">
+                </div>
+                <div class="form-group">
+                    <label for="comentario"><i class="fas fa-comment"></i> Tu mensaje</label>
+                    <textarea id="comentario" name="comentario" rows="4" required placeholder="Comparte tu experiencia, sugerencia o idea para mejorar la movilidad en Urabá..."></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-paper-plane"></i> Enviar Mensaje
+                </button>
+            </form>
+        </div>
+
+        <div class="messages-section" data-aos="fade-up">
+            <h2>Mensajes de la Comunidad</h2>
+            {% if mensajes %}
+                <div class="messages-grid">
+                    {% for mensaje in mensajes %}
+                    <div class="message-card" data-aos="fade-up" data-aos-delay="{{ loop.index * 50 }}">
+                        <div class="message-header">
+                            <div class="message-avatar">
+                                <i class="fas fa-user-circle"></i>
+                            </div>
+                            <div class="message-info">
+                                <h4>{{ mensaje['nombre'] }}</h4>
+                                <p class="message-date">{{ mensaje['fecha'][:16] }}</p>
+                            </div>
+                        </div>
+                        <div class="message-content">
+                            <p>{{ mensaje['comentario'] }}</p>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <div class="no-messages">
+                    <i class="fas fa-comments"></i>
+                    <p>Sé el primero en compartir tu mensaje con la comunidad</p>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</section>
+{% endblock %}

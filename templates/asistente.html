@@ -1,0 +1,153 @@
+{% extends "base.html" %}
+
+{% block title %}Asistente Virtual - ArmonIA Vial{% endblock %}
+
+{% block content %}
+<section class="page-header">
+    <div class="container">
+        <h1 data-aos="fade-down"><i class="fas fa-robot"></i> Asistente Virtual</h1>
+        <p data-aos="fade-up">Pregúntame sobre movilidad, cultura vial y medio ambiente</p>
+    </div>
+</section>
+
+<section class="content-section">
+    <div class="container">
+        <div class="chatbot-container" data-aos="fade-up">
+            <div class="chat-messages" id="chatMessages">
+                <div class="chat-message bot-message">
+                    <div class="message-avatar">
+                        <i class="fas fa-robot"></i>
+                    </div>
+                    <div class="message-bubble">
+                        <p>¡Hola! Soy el asistente virtual de ArmonIA Vial. 👋</p>
+                        <p>Puedo ayudarte con información sobre:</p>
+                        <ul>
+                            <li>🚴 Movilidad sostenible</li>
+                            <li>🎭 Cultura vial</li>
+                            <li>🌱 Medio ambiente</li>
+                            <li>📚 Educación vial</li>
+                            <li>🛣️ Seguridad en las vías</li>
+                        </ul>
+                        <p>¿En qué puedo ayudarte hoy?</p>
+                    </div>
+                </div>
+            </div>
+            
+            <form id="chatForm" class="chat-input-form">
+                <div class="chat-input-container">
+                    <input 
+                        type="text" 
+                        id="chatInput" 
+                        placeholder="Escribe tu pregunta aquí..." 
+                        autocomplete="off"
+                        required
+                    >
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-paper-plane"></i>
+                    </button>
+                </div>
+            </form>
+
+            <div class="chat-suggestions">
+                <p>Sugerencias:</p>
+                <div class="suggestions-buttons">
+                    <button class="suggestion-btn" data-msg="movilidad">Movilidad sostenible</button>
+                    <button class="suggestion-btn" data-msg="cultura">Cultura vial</button>
+                    <button class="suggestion-btn" data-msg="ambiente">Medio ambiente</button>
+                    <button class="suggestion-btn" data-msg="bicicleta">Uso de bicicleta</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+const chatForm = document.getElementById('chatForm');
+const chatInput = document.getElementById('chatInput');
+const chatMessages = document.getElementById('chatMessages');
+const suggestionBtns = document.querySelectorAll('.suggestion-btn');
+
+chatForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const mensaje = chatInput.value.trim();
+    if (!mensaje) return;
+    
+    addMessage(mensaje, 'user');
+    chatInput.value = '';
+    
+    showTypingIndicator();
+    
+    try {
+        const response = await fetch('/api/asistente', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ mensaje })
+        });
+        
+        const data = await response.json();
+        removeTypingIndicator();
+        addMessage(data.respuesta, 'bot');
+    } catch (error) {
+        removeTypingIndicator();
+        addMessage('Lo siento, hubo un error. Por favor intenta de nuevo.', 'bot');
+    }
+});
+
+suggestionBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+        chatInput.value = btn.dataset.msg;
+        chatForm.dispatchEvent(new Event('submit'));
+    });
+});
+
+function addMessage(text, sender) {
+    const messageDiv = document.createElement('div');
+    messageDiv.className = `chat-message ${sender}-message`;
+    
+    const avatar = document.createElement('div');
+    avatar.className = 'message-avatar';
+    avatar.innerHTML = sender === 'bot' ? '<i class="fas fa-robot"></i>' : '<i class="fas fa-user"></i>';
+    
+    const bubble = document.createElement('div');
+    bubble.className = 'message-bubble';
+    bubble.innerHTML = `<p>${text}</p>`;
+    
+    messageDiv.appendChild(avatar);
+    messageDiv.appendChild(bubble);
+    chatMessages.appendChild(messageDiv);
+    
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+}
+
+function showTypingIndicator() {
+    const typingDiv = document.createElement('div');
+    typingDiv.className = 'chat-message bot-message typing-indicator';
+    typingDiv.id = 'typingIndicator';
+    
+    const avatar = document.createElement('div');
+    avatar.className = 'message-avatar';
+    avatar.innerHTML = '<i class="fas fa-robot"></i>';
+    
+    const bubble = document.createElement('div');
+    bubble.className = 'message-bubble';
+    bubble.innerHTML = '<div class="typing-dots"><span></span><span></span><span></span></div>';
+    
+    typingDiv.appendChild(avatar);
+    typingDiv.appendChild(bubble);
+    chatMessages.appendChild(typingDiv);
+    
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+}
+
+function removeTypingIndicator() {
+    const typingIndicator = document.getElementById('typingIndicator');
+    if (typingIndicator) {
+        typingIndicator.remove();
+    }
+}
+</script>
+{% endblock %}
