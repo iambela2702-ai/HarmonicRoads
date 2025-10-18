@@ -1,0 +1,173 @@
+Crea un proyecto Flask llamado ArmonIA Vial, una aplicación web educativa, visual y funcional que promueva la movilidad urbana sostenible en Urabá, Antioquia (Colombia), con enfoque cultural, ambiental, educativo y comunitario.
+La app debe ser moderna, ligera y pedagógica.
+El resultado debe incluir todos los archivos, diseño CSS, rutas Flask, y un logo simple generado a partir del prompt final.
+
+🧠 1. Identidad general
+
+Nombre: ArmonIA Vial
+
+Eslogan: “Mover con respeto, vivir en armonía.”
+
+Ubicación: Urabá, Antioquia
+
+Objetivo: Educar, conectar y sensibilizar a la comunidad sobre movilidad urbana sostenible y respeto vial.
+
+Base: Cultura, pedagogía, tecnología y planificación.
+
+Inspiración visual: Ecoembes, UNEP, Citymapper, apps ecológicas modernas.
+
+🧱 2. Estructura del proyecto
+
+Crea esta estructura:
+
+armonia_vial/
+├─ app.py
+├─ armonia.db
+├─ templates/
+│  ├─ base.html
+│  ├─ index.html
+│  ├─ ambiente.html
+│  ├─ cultura.html
+│  ├─ educacion.html
+│  ├─ mapa.html
+│  ├─ comunidad.html
+│  └─ asistente.html
+└─ static/
+   ├─ css/style.css
+   ├─ js/main.js
+   └─ images/
+
+🌎 3. Rutas Flask y contenido
+/ → Página principal
+
+Nombre grande ArmonIA Vial
+
+Eslogan visible
+
+Imagen o animación alusiva al tráfico sostenible (bicis, calles verdes, peatones).
+
+Frase destacada:
+
+“Conectando Urabá hacia una movilidad con conciencia y armonía.”
+
+Menú con enlaces a las secciones principales.
+
+Botones animados o con hover suave.
+
+/ambiente 🌿
+
+Consejos ecológicos y tips de movilidad verde.
+
+Ejemplo: “Camina si puedes, comparte si manejas.”
+
+Tarjetas con iconos, animaciones suaves (AOS o CSS).
+
+/cultura 🎭
+
+Contenido sobre respeto vial y convivencia.
+
+Frases cortas y educativas (ej. “Respetar el paso es valorar la vida.”).
+
+Posibilidad de mostrar imágenes de la región.
+
+/educacion 🧠
+
+Sección pedagógica.
+
+Módulo con trivias o quizzes simples (JS o botones con alertas).
+
+Mensaje principal: “Aprender a movernos bien es parte de convivir mejor.”
+
+/mapa 🗺️
+
+Mapa interactivo con Leaflet.js.
+
+Mostrar zonas seguras, ciclovías o áreas escolares.
+
+Integrar OpenWeatherMap API para mostrar clima actual en Urabá.
+
+/comunidad 💬
+
+Formulario para dejar nombre y comentario.
+
+Guardar en SQLite (tabla mensajes con id, nombre, comentario, fecha).
+
+Mostrar comentarios recientes con animaciones sutiles.
+
+/asistente 🤖
+
+Chatbot básico de movilidad y respeto vial.
+
+Respuestas predefinidas tipo diccionario:
+
+responses = {
+  "movilidad": "Moverse con respeto es moverse con conciencia. Recuerda priorizar al peatón y compartir la vía.",
+  "cultura": "La convivencia vial también es cultura ciudadana. Una sonrisa puede prevenir un accidente.",
+  "ambiente": "Caminar, usar bici o compartir vehículo ayuda a reducir emisiones. ¡Pequeños gestos, grandes cambios!",
+  "default": "Puedo darte consejos sobre movilidad, cultura vial y medio ambiente. ¡Pregunta algo!"
+}
+
+
+Interfaz estilo burbujas, animación de “escribiendo…”.
+
+🎨 4. Diseño (HTML + CSS)
+
+Colores: verde #2E8B57, azul #1E90FF, blanco #F9FAFB, gris claro #E5E7EB.
+
+Tipografía: Poppins o Nunito.
+
+Diseño responsivo con flexbox / grid.
+
+Navbar fija con scroll suave.
+
+Tarjetas animadas (hover scale).
+
+Animaciones con AOS.js o transition: all 0.3s ease;.
+
+Hero con imagen de fondo y capa translúcida.
+
+Footer con frase:
+
+“Mover con respeto, vivir en armonía. © ArmonIA Vial 2025”
+
+⚙️ 5. Integraciones recomendadas
+
+Leaflet.js → mapa interactivo.
+
+OpenWeatherMap API → mostrar clima actual.
+
+FontAwesome / RemixIcons → íconos visuales.
+
+Animate.css → animaciones de entrada.
+
+Flask-SQLAlchemy (opcional) → para manejar la base de datos.
+
+🧩 6. Funciones Flask clave
+
+Crear base de datos armonia.db al iniciar la app.
+
+Guardar aportes de comunidad con timestamps.
+
+Manejar formulario con POST.
+
+Cargar y mostrar mensajes ordenados por fecha.
+
+Endpoint /api/comunidad para JSON export.
+
+💬 7. Chatbot (básico en Flask)
+
+Ruta /asistente que acepte POST con campo mensaje.
+
+Devuelva una respuesta según el diccionario responses.
+
+Frontend con input de texto, botón “Enviar”, área de chat y animación typing.
+
+🧭 8. Prompt para generar logo
+
+“Crea un logo minimalista para ArmonIA Vial, una aplicación educativa sobre movilidad sostenible en Urabá. Combina elementos de movilidad (bicicleta, peatón, ruta) y naturaleza (hojas, árboles, ondas). Usa tonos verdes, azules y blanco. Tipografía moderna, amigable, legible. Eslogan: ‘Mover con respeto, vivir en armonía’. Estilo simple, adaptable a web y móvil.”
+
+💡 9. Objetivo final
+
+Producir un prototipo educativo funcional con Flask, centrado en la comunidad, la cultura y el respeto vial.
+La aplicación debe transmitir valores ambientales y pedagógicos, usando la tecnología como medio y no como fin.
+Debe ejecutarse localmente con python app.py y abrirse en el navegador con todas las secciones enlazadas.
