@@ -16,14 +16,29 @@ def get_db_connection():
 
 def init_db():
     conn = get_db_connection()
+    
     conn.execute('''
         CREATE TABLE IF NOT EXISTS mensajes (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             nombre TEXT NOT NULL,
-            comentario TEXT NOT NULL,
+            comentario TEXT,
+            mensaje TEXT,
+            tema TEXT DEFAULT 'general',
             fecha TIMESTAMP DEFAULT CURRENT_TIMESTAMP
         )
     ''')
+    
+    cursor = conn.execute("PRAGMA table_info(mensajes)")
+    columns = [column[1] for column in cursor.fetchall()]
+    
+    if 'mensaje' not in columns:
+        conn.execute('ALTER TABLE mensajes ADD COLUMN mensaje TEXT')
+    
+    if 'tema' not in columns:
+        conn.execute('ALTER TABLE mensajes ADD COLUMN tema TEXT DEFAULT "general"')
+    
+    conn.execute('UPDATE mensajes SET mensaje = comentario WHERE mensaje IS NULL AND comentario IS NOT NULL')
+    
     conn.commit()
     conn.close()
 
@@ -50,25 +65,54 @@ def mapa():
     weather_data = get_weather()
     return render_template('mapa.html', weather=weather_data)
 
-@app.route('/comunidad', methods=['GET', 'POST'])
+@app.route('/comunidad')
 def comunidad():
-    if request.method == 'POST':
-        nombre = request.form.get('nombre', '').strip()
-        comentario = request.form.get('comentario', '').strip()
-        
-        if nombre and comentario:
-            conn = get_db_connection()
-            conn.execute('INSERT INTO mensajes (nombre, comentario) VALUES (?, ?)',
-                        (nombre, comentario))
-            conn.commit()
-            conn.close()
-            return redirect(url_for('comunidad'))
-    
     conn = get_db_connection()
-    mensajes = conn.execute('SELECT * FROM mensajes ORDER BY fecha DESC LIMIT 20').fetchall()
+    mensajes = conn.execute('SELECT * FROM mensajes ORDER BY fecha DESC').fetchall()
     conn.close()
     
     return render_template('comunidad.html', mensajes=mensajes)
+
+@app.route('/api/comunidad/add', methods=['POST'])
+def api_comunidad_add():
+    data = request.get_json()
+    nombre = data.get('nombre', '').strip()
+    mensaje = data.get('mensaje', '').strip()
+    tema = data.get('tema', 'general')
+    
+    if not nombre or not mensaje:
+        return jsonify({'error': 'Nombre y mensaje son requeridos'}), 400
+    
+    conn = get_db_connection()
+    cursor = conn.execute(
+        'INSERT INTO mensajes (nombre, mensaje, tema) VALUES (?, ?, ?)',
+        (nombre, mensaje, tema)
+    )
+    mensaje_id = cursor.lastrowid
+    
+    nuevo_mensaje = conn.execute(
+        'SELECT * FROM mensajes WHERE id = ?', 
+        (mensaje_id,)
+    ).fetchone()
+    conn.commit()
+    conn.close()
+    
+    return jsonify({
+        'id': nuevo_mensaje['id'],
+        'nombre': nuevo_mensaje['nombre'],
+        'mensaje': nuevo_mensaje['mensaje'],
+        'tema': nuevo_mensaje['tema'],
+        'fecha': nuevo_mensaje['fecha'][:16]
+    }), 201
+
+@app.route('/api/comunidad/delete/<int:mensaje_id>', methods=['DELETE'])
+def api_comunidad_delete(mensaje_id):
+    conn = get_db_connection()
+    conn.execute('DELETE FROM mensajes WHERE id = ?', (mensaje_id,))
+    conn.commit()
+    conn.close()
+    
+    return jsonify({'success': True}), 200
 
 @app.route('/asistente', methods=['GET', 'POST'])
 def asistente():

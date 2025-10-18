@@ -1,0 +1,117 @@
+jora mi aplicación Flask llamada ArmonIA Vial, que promueve la movilidad urbana sostenible en Urabá.
+Ya tengo las rutas principales creadas.
+Ahora quiero agregar y modernizar la sección /comunidad, convirtiéndola en un muro colaborativo tipo Padlet, completamente funcional, atractivo y educativo.
+
+🎯 Objetivo general
+
+Crear un espacio interactivo y participativo donde los usuarios puedan compartir mensajes, ideas o reflexiones sobre movilidad sostenible, cultura vial y medio ambiente.
+Debe tener un diseño moderno, limpio y ecológico, con animaciones suaves y una experiencia visual que inspire armonía y colaboración.
+
+⚙️ Requisitos funcionales
+
+Ruta Flask /comunidad que muestre:
+
+Un formulario con campos nombre y mensaje.
+
+Un botón para publicar.
+
+Una cuadrícula tipo mural digital donde se muestren los aportes.
+
+Almacenamiento con SQLite:
+
+Crear una tabla mensajes con columnas id, nombre, mensaje, fecha.
+
+Mostrar los mensajes ordenados por fecha descendente.
+
+Permitir eliminar mensajes con un botón (solo si eres admin o desde el mismo dispositivo).
+
+Interactividad:
+
+Los mensajes se actualizan dinámicamente sin recargar toda la página (usar JavaScript con fetch o AJAX).
+
+Cuando se envía un mensaje, debe aparecer automáticamente en el mural con una animación de aparición (fade-in o slide-up).
+
+Posibilidad de eliminar mensajes con confirmación y animación de salida (fade-out).
+
+🎨 Diseño visual (moderno y ecológico)
+
+Estilo tipo Padlet o Pinterest con tarjetas flotantes (rejilla dinámica).
+
+Colores principales: verde menta #4CAF50, azul cielo #2196F3, blanco #F9FAFB.
+
+Tarjetas con sombras suaves, bordes redondeados y emojis ambientales (🌿🚲🌞).
+
+Tipografía moderna: 'Poppins', sans-serif.
+
+Animaciones suaves con AOS.js o Animate.css.
+
+Fondo con gradiente ecológico:
+
+background: linear-gradient(180deg, #E8F5E9 0%, #E3F2FD 100%);
+
+
+Diseño completamente responsivo (columnas ajustables a pantalla).
+
+💬 Experiencia de usuario
+
+Título visible:
+
+“💬 Voces en Armonía — Comparte tu visión para un Urabá más sostenible.”
+
+Formulario sencillo y amigable con mensaje inspirador debajo:
+
+“Cada idea suma al camino hacia una movilidad más humana 🌱.”
+
+Al enviar un mensaje, aparece instantáneamente en el muro.
+
+Cada tarjeta incluye:
+
+Nombre del autor.
+
+Texto del mensaje.
+
+Fecha.
+
+Un ícono ambiental aleatorio.
+
+🧠 Extras opcionales
+
+Opción para filtrar mensajes por tema (Cultura, Educación, Ambiente).
+
+Pequeño contador arriba:
+
+“{{ total }} voces sumando armonía.”
+
+Ruta /admin protegida por contraseña para moderar o eliminar mensajes inapropiados.
+
+🚀 Resultado esperado
+
+Al ejecutar python app.py y visitar /comunidad, el usuario podrá:
+
+Escribir su nombre y un mensaje.
+
+Ver su aporte aparecer inmediatamente en el mural.
+
+Leer y reaccionar a otros mensajes.
+
+Disfrutar de un entorno fluido, ecológico y visualmente atractivo.
+
+🪄 Instrucciones de entrega
+
+No modifiques las demás rutas o plantillas existentes.
+
+Crea/actualiza solo los archivos necesarios:
+
+app.py
+
+templates/comunidad.html
+
+static/css/style.css
+
+static/js/comunidad.js (si usas JS separado)
+
+El resultado debe verse como un mini mural colaborativo, moderno, verde y limpio.
+
+🧩 Frase para el footer
+
+“Proyecto educativo sin fines comerciales. ArmonIA Vial: conectando Urabá hacia una movilidad con conciencia y armonía.”

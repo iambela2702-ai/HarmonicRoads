@@ -3,64 +3,114 @@
 {% block title %}Comunidad - ArmonIA Vial{% endblock %}
 
 {% block content %}
-<section class="page-header">
+<section class="comunidad-header">
     <div class="container">
-        <h1 data-aos="fade-down"><i class="fas fa-users"></i> Comunidad</h1>
-        <p data-aos="fade-up">Comparte tu voz y experiencias viales</p>
+        <h1 data-aos="fade-down">💬 Voces en Armonía</h1>
+        <p class="subtitle" data-aos="fade-up">Comparte tu visión para un Urabá más sostenible</p>
+        <div class="voices-counter" data-aos="zoom-in">
+            <span id="total-voices">{{ mensajes|length }}</span> voces sumando armonía
+        </div>
     </div>
 </section>
 
-<section class="content-section">
+<section class="comunidad-content">
     <div class="container">
-        <div class="community-intro" data-aos="fade-up">
-            <p class="lead">Tu opinión importa. Comparte tus ideas, experiencias y sugerencias para mejorar la movilidad en Urabá.</p>
-        </div>
-
-        <div class="form-section" data-aos="fade-up">
-            <h2>Deja tu mensaje</h2>
-            <form method="POST" action="{{ url_for('comunidad') }}" class="community-form">
-                <div class="form-group">
-                    <label for="nombre"><i class="fas fa-user"></i> Tu nombre</label>
-                    <input type="text" id="nombre" name="nombre" required placeholder="¿Cómo te llamas?">
+        <div class="comunidad-form-container" data-aos="fade-up">
+            <h2>✨ Comparte tu mensaje</h2>
+            <p class="form-inspiration">Cada idea suma al camino hacia una movilidad más humana 🌱</p>
+            
+            <form id="comunidadForm" class="comunidad-form">
+                <div class="form-row">
+                    <div class="form-group-inline">
+                        <label for="nombre">
+                            <i class="fas fa-user"></i> Tu nombre
+                        </label>
+                        <input type="text" id="nombre" name="nombre" required placeholder="¿Cómo te llamas?">
+                    </div>
+                    
+                    <div class="form-group-inline theme-select">
+                        <label for="tema">
+                            <i class="fas fa-tag"></i> Tema
+                        </label>
+                        <select id="tema" name="tema">
+                            <option value="general">General</option>
+                            <option value="cultura">Cultura Vial</option>
+                            <option value="educacion">Educación</option>
+                            <option value="ambiente">Ambiente</option>
+                        </select>
+                    </div>
                 </div>
+                
                 <div class="form-group">
-                    <label for="comentario"><i class="fas fa-comment"></i> Tu mensaje</label>
-                    <textarea id="comentario" name="comentario" rows="4" required placeholder="Comparte tu experiencia, sugerencia o idea para mejorar la movilidad en Urabá..."></textarea>
+                    <label for="mensaje">
+                        <i class="fas fa-comment-dots"></i> Tu mensaje
+                    </label>
+                    <textarea id="mensaje" name="mensaje" rows="3" required placeholder="Comparte tu idea, experiencia o sugerencia para mejorar la movilidad en Urabá..."></textarea>
                 </div>
-                <button type="submit" class="btn btn-primary">
-                    <i class="fas fa-paper-plane"></i> Enviar Mensaje
+                
+                <button type="submit" class="btn-submit">
+                    <i class="fas fa-paper-plane"></i> Publicar en el mural
                 </button>
             </form>
         </div>
 
-        <div class="messages-section" data-aos="fade-up">
-            <h2>Mensajes de la Comunidad</h2>
+        <div class="filter-tabs" data-aos="fade-up">
+            <button class="filter-tab active" data-filter="all">
+                <i class="fas fa-globe"></i> Todos
+            </button>
+            <button class="filter-tab" data-filter="cultura">
+                <i class="fas fa-theater-masks"></i> Cultura
+            </button>
+            <button class="filter-tab" data-filter="educacion">
+                <i class="fas fa-graduation-cap"></i> Educación
+            </button>
+            <button class="filter-tab" data-filter="ambiente">
+                <i class="fas fa-leaf"></i> Ambiente
+            </button>
+        </div>
+
+        <div id="murales-grid" class="murales-grid">
             {% if mensajes %}
-                <div class="messages-grid">
-                    {% for mensaje in mensajes %}
-                    <div class="message-card" data-aos="fade-up" data-aos-delay="{{ loop.index * 50 }}">
-                        <div class="message-header">
-                            <div class="message-avatar">
-                                <i class="fas fa-user-circle"></i>
-                            </div>
-                            <div class="message-info">
-                                <h4>{{ mensaje['nombre'] }}</h4>
-                                <p class="message-date">{{ mensaje['fecha'][:16] }}</p>
-                            </div>
+                {% for mensaje in mensajes %}
+                <div class="mural-card" data-id="{{ mensaje['id'] }}" data-tema="{{ mensaje['tema'] if mensaje['tema'] else 'general' }}" data-aos="fade-up" data-aos-delay="{{ loop.index0 * 50 }}">
+                    <div class="card-header">
+                        <div class="card-icon">{{ ['🌿', '🚲', '🌞', '🌍', '🚶', '🌱', '💚', '🛣️', '🏙️', '⚡'][loop.index0 % 10] }}</div>
+                        <div class="card-info">
+                            <h4>{{ mensaje['nombre'] }}</h4>
+                            <span class="card-date">{{ mensaje['fecha'][:16] }}</span>
                         </div>
-                        <div class="message-content">
-                            <p>{{ mensaje['comentario'] }}</p>
-                        </div>
+                        {% if mensaje['tema'] and mensaje['tema'] != 'general' %}
+                        <span class="card-badge badge-{{ mensaje['tema'] }}">{{ mensaje['tema'].title() }}</span>
+                        {% endif %}
                     </div>
-                    {% endfor %}
+                    <div class="card-body">
+                        <p>{{ mensaje['mensaje'] }}</p>
+                    </div>
+                    <div class="card-footer">
+                        <button class="btn-delete" onclick="eliminarMensaje({{ mensaje['id'] }})">
+                            <i class="fas fa-trash-alt"></i>
+                        </button>
+                    </div>
                 </div>
+                {% endfor %}
             {% else %}
-                <div class="no-messages">
+                <div class="empty-state">
                     <i class="fas fa-comments"></i>
-                    <p>Sé el primero en compartir tu mensaje con la comunidad</p>
+                    <p>Sé la primera voz en compartir tu visión</p>
+                    <p class="empty-subtitle">Tu mensaje puede inspirar cambios en Urabá</p>
                 </div>
             {% endif %}
         </div>
     </div>
 </section>
+
+<div class="comunidad-footer-info">
+    <div class="container">
+        <p>Proyecto educativo sin fines comerciales. ArmonIA Vial: conectando Urabá hacia una movilidad con conciencia y armonía.</p>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{{ url_for('static', filename='js/comunidad.js') }}"></script>
 {% endblock %}
