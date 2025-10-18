@@ -6,6 +6,16 @@ ArmonIA Vial is a Flask-based educational web application promoting sustainable 
 
 ## Recent Changes
 
+**October 18, 2025**: Enhanced /comunidad section into modern Padlet-style collaborative wall:
+- Redesigned community section with fresh green/blue theme (#4CAF50, #2196F3)
+- Implemented AJAX-powered message posting and deletion without page reloads
+- Added theme categorization (General, Cultura, Educación, Ambiente) with live filtering
+- Created smooth animations (fade-in, slide-up, fade-out) for dynamic content
+- Implemented XSS protection using DOM APIs instead of innerHTML
+- Added proper database migration to handle schema updates
+- Designed responsive card-based grid layout similar to Padlet
+- Added voice counter showing total community contributions
+
 **October 18, 2025**: Complete application implementation with all 7 sections fully functional:
 - Created Flask backend with SQLite database integration
 - Implemented all HTML templates with Jinja2 inheritance
@@ -49,7 +59,9 @@ Preferred communication style: Simple, everyday language.
 - `/cultura` - Road culture and behavioral principles
 - `/educacion` - Interactive educational content and quizzes
 - `/mapa` - Interactive map with weather integration
-- `/comunidad` - Community message board
+- `/comunidad` - Interactive Padlet-style collaborative wall with AJAX functionality
+- `/api/comunidad/add` - POST endpoint for adding messages dynamically
+- `/api/comunidad/delete/<id>` - DELETE endpoint for removing messages
 - `/asistente` - Virtual assistant chatbot interface
 
 **Session Management**: Flask session handling with secret key configuration from environment variables for security.
@@ -64,7 +76,9 @@ Preferred communication style: Simple, everyday language.
 - `comentario` (TEXT, NOT NULL)
 - `fecha` (TIMESTAMP, DEFAULT CURRENT_TIMESTAMP)
 
-**Database Initialization**: Automatic table creation at module import via `init_db()` function called at module level, ensuring database setup regardless of deployment method (direct Python execution or WSGI server).
+**Database Initialization**: Automatic table creation at module import via `init_db()` function called at module level, ensuring database setup regardless of deployment method (direct Python execution or WSGI server). Includes intelligent migration logic to add `mensaje` and `tema` columns to existing databases.
+
+**Schema Evolution**: The database schema has evolved from a simple `comentario` field to include `mensaje` (content) and `tema` (category) fields for better organization and filtering. Migration logic automatically backfills data from legacy `comentario` column.
 
 **Connection Management**: Row factory configured to return dictionary-like Row objects for easier template integration.
 
@@ -101,4 +115,11 @@ Currently no authentication system implemented. The community message board acce
 
 **Educational Focus**: Fully functional interactive quiz system in education section with 5 questions about sustainable mobility, real-time scoring, and educational feedback.
 
-**Community Engagement**: Message board system allows citizen participation and feedback collection.
+**Community Engagement**: Modern Padlet-style collaborative wall (`static/js/comunidad.js`) with:
+- AJAX-powered real-time message posting and deletion
+- Theme-based categorization and filtering (Cultura, Educación, Ambiente)
+- XSS protection via secure DOM manipulation (textContent instead of innerHTML)
+- Smooth animations and transitions for enhanced UX
+- Toast notifications for user feedback
+- Responsive card-based grid layout
+- Environmental emoji icons for visual appeal
